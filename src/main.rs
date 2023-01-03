@@ -67,18 +67,24 @@ fn main() {
         // Update the state of the oscillator
         let time: f32 = (t * dt) as f32;
         oscillator.set_state(time / 1000.0);
-
-        let deb_amplitude: f32 = (oscillator.sig.0.powf(2.0) + 
-            oscillator.sig.1.powf(2.0)).sqrt();
         
-        // println!("{} seconds passed", time / 1000.0);
-        println!("Complex signal: {}, {}, - Amplitude: {}", 
-            oscillator.sig.0, oscillator.sig.1, deb_amplitude);
-        
-        // Compensate for computation time; then sleep
+        // Compensate for computation time; then sleep dt
         thread::sleep(dur - now.elapsed());
         
-        if t >= 10 {
+        // Add the real part of the oscillating signal to
+        // the signal vector at index t.
+        // If signal vector is filled out, shift the array
+        // before adding new value
+        if t < len {
+            signal[t as usize] = oscillator.sig.0;
+        } else {
+            signal.rotate_left(1);
+            signal[(len - 1) as usize] = oscillator.sig.0;
+        }
+
+        println!("Sampled signal: {:?}", signal);
+        
+        if t >= 20 {
             break;
         }
         t += 1;
