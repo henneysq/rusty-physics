@@ -56,9 +56,10 @@ fn main() {
     println!("{:?}", signal);
 
     // Get a time loop going
-    let dt: u64 = 100; // ms
-    let dur = time::Duration::from_millis(dt);
-    let mut t: u64 = 0;
+    let dt: u64 = 100; // time resolution [ms]
+    let dur = time::Duration::from_millis(dt); // Thread sleep variable
+    let mut t: u64 = 0; // iteration variable
+    let n_iterations: u64 = 40;
     
     loop {
         // Check time at beginning 
@@ -84,7 +85,7 @@ fn main() {
 
         println!("Sampled signal: {:?}", signal);
         
-        if t >= 20 {
+        if t >= n_iterations {
             break;
         }
         t += 1;
