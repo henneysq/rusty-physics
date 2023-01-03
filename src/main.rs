@@ -1,4 +1,4 @@
-use std::{thread, time, f32::consts::PI};
+use std::{thread, time, f32::consts::PI, collections::VecDeque};
 
 struct Oscillator {
     // An oscillator oscillating with a frequency,
@@ -17,9 +17,9 @@ impl Oscillator {
         // freq: oscillation frequency [Hz]
         // phase: initial oscillation phase [radians]
         Oscillator { 
-            freq: freq, 
-            amplitude: amplitude, 
-            phase: phase, 
+            freq, 
+            amplitude, 
+            phase, 
             sig: (0.0, 0.0) }
     }
 
