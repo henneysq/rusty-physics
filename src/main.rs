@@ -32,6 +32,15 @@ impl Oscillator {
     }
 }
 
+fn make_sig_array(len: u32) -> VecDeque<f32> {
+    let mut signal: Vec<f32> = Vec::with_capacity(len as usize);
+    for _i in 0..len {
+        signal.push(0.0);
+    }
+    let signal: VecDeque<f32> = VecDeque::from(signal);
+    return signal
+}
+
 fn main() {    
     // Define some parameters for an oscillation
     let freq: f32 = 0.25; // [Hz]
@@ -40,6 +49,11 @@ fn main() {
     let mut oscillator = Oscillator::new(
         freq, ampl, phase
     );
+
+    // Define a data array
+    let len: u64 = 10;
+    let mut signal = make_sig_array(len as u32);
+    println!("{:?}", signal);
 
     // Get a time loop going
     let dt: u64 = 100; // ms
