@@ -75,7 +75,7 @@ fn main() {
     );
 
     // Define a data array
-    let len: u64 = 10;
+    let len: u64 = 50;
     let mut signal = make_sig_array(len as u32);
     println!("{:?}", signal);
 
@@ -88,14 +88,14 @@ fn main() {
     
     loop {
         // Check time at beginning 
-        let now = time::Instant::now();
+        //let now = time::Instant::now();
 
         // Update the state of the oscillator
-        let time: f32 = (t * dt) as f32;
+        let time: f64 = (t * dt) as f64;
         oscillator.set_state(time / 1000.0);
         
         // Compensate for computation time; then sleep dt
-        thread::sleep(dur - now.elapsed());
+        //thread::sleep(dur - now.elapsed());
         
         // Add the real part of the oscillating signal to
         // the signal vector at index t.
