@@ -1,17 +1,18 @@
-use std::{thread, time, f32::consts::PI, collections::VecDeque};
+use std::{thread, time, f64::consts::PI, collections::VecDeque};
+use plotters::prelude::*;
 
 struct Oscillator {
     // An oscillator oscillating with a frequency,
     // amplitude, and phase
-    freq: f32, // [Hz]
-    phase: f32, // [rad]
-    amplitude: f32,
-    sig: (f32, f32),
+    freq: f64, // [Hz]
+    phase: f64, // [rad]
+    amplitude: f64,
+    sig: (f64, f64),
 
 }
 
 impl Oscillator {
-    fn new(freq: f32, amplitude: f32, phase: f32) -> Oscillator {
+    fn new(freq: f64, amplitude: f64, phase: f64) -> Oscillator {
         // Create new oscillator
         //
         // freq: oscillation frequency [Hz]
@@ -23,29 +24,29 @@ impl Oscillator {
             sig: (0.0, 0.0) }
     }
 
-    fn set_state(&mut self, t: f32) {
+    fn set_state(&mut self, t: f64) {
         // Sets a new state of the oscillator.
         // t: time in seconds
-        let osc: f32 = t * self.freq * (2.0 * PI) + self.phase;
+        let osc: f64 = t * self.freq * (2.0 * PI) + self.phase;
         self.sig.0 = self.amplitude * osc.sin();
         self.sig.1 = self.amplitude * osc.cos();
     }
 }
 
-fn make_sig_array(len: u32) -> VecDeque<f32> {
-    let mut signal: Vec<f32> = Vec::with_capacity(len as usize);
+fn make_sig_array(len: u32) -> VecDeque<f64> {
+    let mut signal: Vec<f64> = Vec::with_capacity(len as usize);
     for _i in 0..len {
         signal.push(0.0);
     }
-    let signal: VecDeque<f32> = VecDeque::from(signal);
+    let signal: VecDeque<f64> = VecDeque::from(signal);
     return signal
 }
 
 fn main() {    
     // Define some parameters for an oscillation
-    let freq: f32 = 0.25; // [Hz]
-    let ampl: f32 = 2.0;
-    let phase: f32 = 0.0;
+    let freq: f64 = 0.25; // [Hz]
+    let ampl: f64 = 4.0;
+    let phase: f64 = 0.0;
     let mut oscillator = Oscillator::new(
         freq, ampl, phase
     );
