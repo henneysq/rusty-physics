@@ -42,6 +42,29 @@ fn make_sig_array(len: u32) -> VecDeque<f64> {
     return signal
 }
 
+fn plot_signal(time: VecDeque<f64>, sig: VecDeque<f64>) {
+    let time_sig: Vec<(f64, f64)> = time.iter().cloned().zip(sig.iter().cloned()).collect();
+
+    let root_area = BitMapBackend::new("test.png", (1200, 800)).into_drawing_area();
+    root_area.fill(&WHITE).unwrap();
+
+    let mut ctx = ChartBuilder::on(&root_area)
+        .set_label_area_size(LabelAreaPosition::Left, 80.0)
+        .set_label_area_size(LabelAreaPosition::Bottom, 80.0)
+        .set_label_area_size(LabelAreaPosition::Right, 80.0)
+        .set_label_area_size(LabelAreaPosition::Top, 80.0)
+        .caption("Signal", ("sans-serif", 40.0))
+        .build_cartesian_2d(time[0]..time[time.len() - 1], -4.0..4.0)
+        .unwrap();
+
+    ctx.configure_mesh().draw().unwrap();
+
+    ctx.draw_series(
+        time_sig.iter().map(|point| Circle::new(*point, 4.0_f64, &BLUE)),
+    ).unwrap();
+    
+}
+
 fn main() {    
     // Define some parameters for an oscillation
     let freq: f64 = 0.25; // [Hz]
@@ -60,7 +83,8 @@ fn main() {
     let dt: u64 = 100; // time resolution [ms]
     let dur = time::Duration::from_millis(dt); // Thread sleep variable
     let mut t: u64 = 0; // iteration variable
-    let n_iterations: u64 = 40;
+    let mut t_vec: VecDeque<f64> = make_sig_array(len as u32); // Prepare time array
+    let n_iterations: u64 = 50;
     
     loop {
         // Check time at beginning 
@@ -79,16 +103,23 @@ fn main() {
         // before adding new value
         if t < len {
             signal[t as usize] = oscillator.sig.0;
+            t_vec[t as usize] = time;
         } else {
             signal.rotate_left(1);
             signal[(len - 1) as usize] = oscillator.sig.0;
+            t_vec.rotate_left(1);
+            t_vec[(len - 1) as usize] = time;
         }
 
         println!("Sampled signal: {:?}", signal);
+        println!("Time vector: {:?}", t_vec);
         
         if t >= n_iterations {
             break;
         }
         t += 1;
     }
+
+    plot_signal(t_vec, signal);
+
 }
