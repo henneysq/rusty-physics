@@ -45,7 +45,7 @@ fn make_sig_array(len: u32) -> VecDeque<f64> {
 fn plot_signal(time: VecDeque<f64>, sig: VecDeque<f64>) {
     let time_sig: Vec<(f64, f64)> = time.iter().cloned().zip(sig.iter().cloned()).collect();
 
-    let root_area = BitMapBackend::new("test.png", (1200, 800)).into_drawing_area();
+    let root_area = BitMapBackend::new("img/test.png", (1200, 800)).into_drawing_area();
     root_area.fill(&WHITE).unwrap();
 
     let mut ctx = ChartBuilder::on(&root_area)
